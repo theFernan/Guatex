@@ -141,14 +141,24 @@ public class Login extends javax.swing.JFrame {
         Guatex guatex = new Guatex();
         PreparedStatement consulta=guatex.getConnection().prepareStatement("SELECT JERARQUIA FROM USUARIOS WHERE CODIGO= ? AND CONTRASEÑA = ? ");
         consulta.setString(1, textFieldUsuario.getText());
-        consulta.setString(2, textFieldContraseña.getText());
-        ResultSet resultado=consulta.executeQuery();         
+        consulta.setString(2, textFieldContraseña.getText());        
+        ResultSet resultado=consulta.executeQuery();            
         while (resultado.next()){
             if(resultado==null){
             }else{
-                pp.gerarquia=resultado.getInt("JERARQUIA");
-                validacion=true;
-            }                      
+                PreparedStatement consulta2=guatex.getConnection().prepareStatement("SELECT ESTADO FROM USUARIOS WHERE CODIGO= ? AND CONTRASEÑA = ? ");
+                consulta2.setString(1, textFieldUsuario.getText());
+                consulta2.setString(2, textFieldContraseña.getText());
+                ResultSet resultado2=consulta2.executeQuery();
+                while (resultado2.next()){
+                    if(resultado2.getInt("ESTADO")==1){
+                        pp.gerarquia=resultado.getInt("JERARQUIA");
+                        validacion=true;
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Usuario Desactivado Intente En Otro Momento");
+                    } 
+                }
+            }   
         }
         return validacion;
     }  

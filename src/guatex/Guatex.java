@@ -26,6 +26,7 @@ public class Guatex {
             connection=DriverManager.getConnection(url, user, pass);
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null, "Error De Conexion");
+            System.out.println(e);
         }
     }
     
