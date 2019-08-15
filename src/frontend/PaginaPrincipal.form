@@ -568,6 +568,10 @@
     </Component>
     <Container class="javax.swing.JInternalFrame" name="internalFramePtosCtrol">
       <Properties>
+        <Property name="closable" type="boolean" value="true"/>
+        <Property name="iconifiable" type="boolean" value="true"/>
+        <Property name="maximizable" type="boolean" value="true"/>
+        <Property name="resizable" type="boolean" value="true"/>
         <Property name="visible" type="boolean" value="true"/>
       </Properties>
 
@@ -756,7 +760,7 @@
             <Component class="javax.swing.JRadioButton" name="radioButtonPuntoActivo">
               <Properties>
                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                  <ComponentRef name="buttonGroupEstadoRuta"/>
+                  <ComponentRef name="buttonGroupEstadoPunto"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Activa"/>
               </Properties>
@@ -764,7 +768,7 @@
             <Component class="javax.swing.JRadioButton" name="radioButtonPuntoInactivo">
               <Properties>
                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                  <ComponentRef name="buttonGroupEstadoRuta"/>
+                  <ComponentRef name="buttonGroupEstadoPunto"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Inactiva"/>
               </Properties>
@@ -818,6 +822,8 @@
       </SubComponents>
     </Container>
     <Component class="javax.swing.ButtonGroup" name="buttonGroupTarifaPtoCtrl">
+    </Component>
+    <Component class="javax.swing.ButtonGroup" name="buttonGroupEstadoPunto">
     </Component>
     <Menu class="javax.swing.JMenuBar" name="jMenuBar1">
       <SubComponents>
@@ -873,6 +879,14 @@
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem4ActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem5">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Ptos. De Ctrl."/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem5ActionPerformed"/>
                   </Events>
                 </MenuItem>
               </SubComponents>

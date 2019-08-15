@@ -118,6 +118,7 @@ public class PaginaPrincipal extends javax.swing.JFrame {
         textFieldLocalizacionPunto = new javax.swing.JTextField();
         jLabel19 = new javax.swing.JLabel();
         buttonGroupTarifaPtoCtrl = new javax.swing.ButtonGroup();
+        buttonGroupEstadoPunto = new javax.swing.ButtonGroup();
         panelPrincipal = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuCuenta = new javax.swing.JMenu();
@@ -128,6 +129,7 @@ public class PaginaPrincipal extends javax.swing.JFrame {
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
         menuListados = new javax.swing.JMenu();
         menuOpcionesOperador = new javax.swing.JMenu();
 
@@ -507,6 +509,10 @@ public class PaginaPrincipal extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        internalFramePtosCtrol.setClosable(true);
+        internalFramePtosCtrol.setIconifiable(true);
+        internalFramePtosCtrol.setMaximizable(true);
+        internalFramePtosCtrol.setResizable(true);
         internalFramePtosCtrol.setVisible(true);
 
         jPanel4.setPreferredSize(new java.awt.Dimension(450, 325));
@@ -539,10 +545,10 @@ public class PaginaPrincipal extends javax.swing.JFrame {
             }
         });
 
-        buttonGroupEstadoRuta.add(radioButtonPuntoActivo);
+        buttonGroupEstadoPunto.add(radioButtonPuntoActivo);
         radioButtonPuntoActivo.setText("Activa");
 
-        buttonGroupEstadoRuta.add(radioButtonPuntoInactivo);
+        buttonGroupEstadoPunto.add(radioButtonPuntoInactivo);
         radioButtonPuntoInactivo.setText("Inactiva");
         radioButtonPuntoInactivo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -729,6 +735,14 @@ public class PaginaPrincipal extends javax.swing.JFrame {
             }
         });
         menuCrud.add(jMenuItem4);
+
+        jMenuItem5.setText("Ptos. De Ctrl.");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        menuCrud.add(jMenuItem5);
 
         menuOpcionesAdministrador.add(menuCrud);
 
@@ -1169,14 +1183,14 @@ public class PaginaPrincipal extends javax.swing.JFrame {
                             radioButtonPuntoActivo.setSelected(true);
                         }
                         textFieldLocalizacionPunto.setText(resultado.getString("LOCALIZACION"));
-                        buttonActualizarRuta.setVisible(true);
-                        buttonCrearRuta.setVisible(false);
+                        buttonActualizarPunto.setVisible(true);
+                        buttonCrearPunto.setVisible(false);
                     }
                 }
                 if(existe==false){
                     JOptionPane.showMessageDialog(null, "Punto De Control No Encontrado, Debe Crearlo");
-                    buttonCrearRuta.setVisible(true);
-                    buttonActualizarRuta.setVisible(false);
+                    buttonActualizarPunto.setVisible(false);
+                     buttonCrearPunto.setVisible(true);
                     textFieldDestino_ruta.setText("");
                     textFieldNumeroRuta.setText("");
                 }
@@ -1214,6 +1228,16 @@ public class PaginaPrincipal extends javax.swing.JFrame {
                 actualizar.setString(4, textFieldDestino_PtoCtrl.getText());
                 actualizar.setInt(5, Integer.valueOf(textFieldNumeroPtoCtrl.getText()));
                 actualizar.setInt(6, Integer.valueOf(textFieldNumeroRuta_PtoCtrl.getText()));
+                JOptionPane.showMessageDialog(null, "Actualizacion Completa");
+                actualizar.executeUpdate();
+                textFieldDestino_PtoCtrl.setText("");
+                textFieldNumeroRuta_PtoCtrl.setText("");
+                textFieldNumeroPtoCtrl.setText("");
+                textFieldLocalizacionPunto.setText("");
+                buttonActualizarPunto.setVisible(false);
+                buttonCrearPunto.setVisible(false);
+                buttonGroupTarifaPtoCtrl.clearSelection();
+                buttonGroupEstadoPunto.clearSelection();
             }else{
                 JOptionPane.showMessageDialog(null, "La Informacion Debe Estar Completa");
             }
@@ -1226,7 +1250,48 @@ public class PaginaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonActualizarPuntoActionPerformed
 
     private void buttonCrearPuntoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCrearPuntoActionPerformed
-        // TODO add your handling code here:
+        PreparedStatement actualizar;
+        Guatex guatex = new Guatex();
+        try {
+            if(!textFieldDestino_PtoCtrl.getText().equals("")&&!textFieldNumeroRuta_PtoCtrl.getText().equals("")
+                    &&!textFieldNumeroPtoCtrl.getText().equals("")&&!textFieldLocalizacionPunto.getText().equals("")
+                    &&(radioButtonTarfiaGlobal.isSelected()||radioButtonTarfiaPropia.isSelected())
+                    &&(radioButtonPuntoActivo.isSelected()||radioButtonPuntoInactivo.isSelected())){
+                actualizar = guatex.getConnection().prepareStatement("INSERT INTO PUNTOS_DE_CONTROL VALUES( ? , ? , ? , ? , ? , ? )");
+                actualizar.setInt(1, Integer.valueOf(textFieldNumeroPtoCtrl.getText()));
+                if(radioButtonTarfiaGlobal.isSelected()){
+                    actualizar.setInt(2, 0);
+                }else if(radioButtonTarfiaPropia.isSelected()){
+                    actualizar.setInt(2, 1);
+                }
+                actualizar.setInt(3, Integer.valueOf(textFieldNumeroRuta_PtoCtrl.getText()));
+                actualizar.setString(4, textFieldDestino_PtoCtrl.getText());
+                actualizar.setString(5, textFieldLocalizacionPunto.getText());
+                if(radioButtonPuntoActivo.isSelected()){
+                    actualizar.setInt(6, 1);
+                }else if(radioButtonPuntoInactivo.isSelected()){
+                    actualizar.setInt(6, 0);
+                }
+                actualizar.executeUpdate();
+                textFieldDestino_PtoCtrl.setText("");
+                textFieldNumeroRuta_PtoCtrl.setText("");
+                textFieldNumeroPtoCtrl.setText("");
+                textFieldLocalizacionPunto.setText("");
+                buttonActualizarPunto.setVisible(false);
+                buttonCrearPunto.setVisible(false);
+                buttonGroupTarifaPtoCtrl.clearSelection();
+                buttonGroupEstadoPunto.clearSelection();
+                JOptionPane.showMessageDialog(null, "Registro Completo");
+            }else{
+                JOptionPane.showMessageDialog(null, "La Informacion Debe Estar Completa");
+            }
+        } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Verifique sus datos, Como Por ejemplo que todos los campos esten llenos"
+                        + "\ny que el codigo de destino tenga 10 caracteres o menos y que los datos esten registrados");
+                System.out.println(ex);
+        } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "formato de datos Incorrecto, verifique");
+        }
     }//GEN-LAST:event_buttonCrearPuntoActionPerformed
 
     private void radioButtonPuntoInactivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioButtonPuntoInactivoActionPerformed
@@ -1241,6 +1306,20 @@ public class PaginaPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_radioButtonTarfiaPropiaActionPerformed
 
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        textFieldDestino_PtoCtrl.setText("");
+        textFieldNumeroRuta_PtoCtrl.setText("");
+        textFieldNumeroPtoCtrl.setText("");
+        textFieldLocalizacionPunto.setText("");
+        buttonActualizarPunto.setVisible(false);
+        buttonCrearPunto.setVisible(false);
+        buttonGroupTarifaPtoCtrl.clearSelection();
+        buttonGroupEstadoPunto.clearSelection();
+        panelPrincipal.add(internalFramePtosCtrol);
+        internalFramePtosCtrol.pack();
+        internalFramePtosCtrol.setVisible(true);
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonActualizarDestino;
@@ -1251,6 +1330,7 @@ public class PaginaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton buttonCrearPunto;
     private javax.swing.JButton buttonCrearRuta;
     private javax.swing.JButton buttonCrearUsuario;
+    private javax.swing.ButtonGroup buttonGroupEstadoPunto;
     private javax.swing.ButtonGroup buttonGroupEstadoRuta;
     private javax.swing.ButtonGroup buttonGroupEstadoUsuario;
     private javax.swing.ButtonGroup buttonGroupGerarquiaUsuario;
@@ -1283,6 +1363,7 @@ public class PaginaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
